@@ -18,6 +18,15 @@ public class WxProperties {
     private String notifyUrl;
 
     private String keyPath;
+    private String callbackAuth;
+
+    public String getCallbackAuth() {
+        return callbackAuth;
+    }
+
+    public void setCallbackAuth(String callbackAuth) {
+        this.callbackAuth = callbackAuth;
+    }
 
     public String getNotifyUrl() {
         return notifyUrl;

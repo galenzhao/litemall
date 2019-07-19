@@ -11,6 +11,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.linlinjava.litemall.core.config.WxProperties;
 import org.linlinjava.litemall.core.express.ExpressService;
 import org.linlinjava.litemall.core.express.dao.ExpressInfo;
 import org.linlinjava.litemall.core.notify.NotifyService;
@@ -67,6 +68,9 @@ import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 @Service
 public class WxOrderService {
     private final Log logger = LogFactory.getLog(WxOrderService.class);
+
+    @Autowired
+    private WxProperties properties;
 
     @Autowired
     private LitemallUserService userService;
@@ -573,6 +577,20 @@ public class WxOrderService {
      */
     @Transactional
     public Object payNotify(HttpServletRequest request, HttpServletResponse response) {
+        String auth = properties.getCallbackAuth();
+        String header = request.getHeader("x-wx-callback-auth");
+
+        boolean check = false;
+        if(auth!=null && header!=null){
+            if(auth.equalsIgnoreCase(header)){
+                check = true;
+            }
+        }else{
+
+        }
+        if (check == false){
+            return WxPayNotifyResponse.fail("no auth code!");
+        }
         String xmlResult = null;
         try {
             xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());

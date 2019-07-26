@@ -15,9 +15,13 @@ public class IpUtil {
     private static final Log logger = LogFactory.getLog(IpUtil.class);
 
     public static String getIpAddr(HttpServletRequest request) {
-        String ipAddress;
+        String ipAddress = null;
         try {
-            ipAddress = request.getHeader("x-forwarded-for");
+            // aliyun apigateway ip
+            ipAddress = request.getHeader("clientip");
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("x-forwarded-for");
+            }
             if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
                 ipAddress = request.getHeader("Proxy-Client-IP");
             }

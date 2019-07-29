@@ -94,10 +94,21 @@ public class NotifyProperties {
     }
 
     public static class Sms {
+        private String type;
         private boolean enable;
         private int appid;
         private String appkey;
+        private String secret;
+        private String sign;
         private List<Map<String, String>> template = new ArrayList<>();
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
 
         public boolean isEnable() {
             return enable;
@@ -121,6 +132,22 @@ public class NotifyProperties {
 
         public void setAppkey(String appkey) {
             this.appkey = appkey;
+        }
+
+        public String getSecret() {
+            return secret;
+        }
+
+        public void setSecret(String secret) {
+            this.secret = secret;
+        }
+
+        public String getSign() {
+            return sign;
+        }
+
+        public void setSign(String sign) {
+            this.sign = sign;
         }
 
         public List<Map<String, String>> getTemplate() {

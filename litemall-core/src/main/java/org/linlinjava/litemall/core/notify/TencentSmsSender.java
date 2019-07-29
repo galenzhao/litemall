@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 /*
  * 腾讯云短信服务
@@ -41,7 +42,13 @@ public class TencentSmsSender implements SmsSender {
         return null;
     }
 
+
     @Override
+    public SmsResult sendWithTemplate(String phone, int templateId, Map<String, String> smsTemplate, String[] params) {
+        return sendWithTemplate(phone, templateId, params);
+    }
+
+        @Override
     public SmsResult sendWithTemplate(String phone, int templateId, String[] params) {
         try {
             SmsSingleSenderResult result = sender.sendWithParam("86", phone, templateId, params, "", "", "");

@@ -67,7 +67,7 @@ public class NotifyService {
         }
 
         int templateId = Integer.parseInt(templateIdStr);
-        smsSender.sendWithTemplate(phoneNumber, templateId, params);
+        smsSender.sendWithTemplate(phoneNumber, templateId, getTemplate(notifyType, smsTemplate), params);
     }
 
     /**
@@ -84,7 +84,7 @@ public class NotifyService {
 
         int templateId = Integer.parseInt(getTemplateId(notifyType, smsTemplate));
 
-        return smsSender.sendWithTemplate(phoneNumber, templateId, params);
+        return smsSender.sendWithTemplate(phoneNumber, templateId, getTemplate(notifyType, smsTemplate), params);
     }
 
     /**
@@ -142,6 +142,17 @@ public class NotifyService {
         message.setSubject(subject);
         message.setText(content);
         mailSender.send(message);
+    }
+    private Map<String, String> getTemplate(NotifyType notifyType, List<Map<String, String>> values){
+        for (Map<String, String> item : values) {
+            String notifyTypeStr = notifyType.getType();
+
+            if (item.get("name").equals(notifyTypeStr)) {
+//                return item.get("templateId");
+                return item;
+            }
+        }
+        return null;
     }
 
     private String getTemplateId(NotifyType notifyType, List<Map<String, String>> values) {

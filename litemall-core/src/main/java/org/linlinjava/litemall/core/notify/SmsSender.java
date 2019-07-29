@@ -1,5 +1,8 @@
 package org.linlinjava.litemall.core.notify;
 
+import java.util.List;
+import java.util.Map;
+
 public interface SmsSender {
 
     /**
@@ -19,4 +22,5 @@ public interface SmsSender {
      * @param params     通知模版内容里的参数，类似"您的验证码为{1}"中{1}的值
      */
     SmsResult sendWithTemplate(String phone, int templateId, String[] params);
+    SmsResult sendWithTemplate(String phone, int templateId, Map<String, String> smsTemplate, String[] params);
 }

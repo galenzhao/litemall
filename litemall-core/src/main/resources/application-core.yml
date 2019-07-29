@@ -24,18 +24,22 @@ litemall:
     # 短消息模版通知配置
     # 短信息用于通知客户，例如发货短信通知，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
     sms:
-      enable: false
+      type: aliyun
+      enable: true
       appid: 111111111
       appkey: xxxxxxxxxxxxxx
+      secret: yyyyy
+      sign: 酒肉大观
       template:
-      - name: paySucceed
-        templateId: 156349
-      - name: captcha
-        templateId: 156433
-      - name: ship
-        templateId: 158002
-      - name: refund
-        templateId: 159447
+        - name: paySucceed
+          templateId: 156349
+          templateParam: "{     \"status\": \"%(v0)\",      \"remark\": \"%(v1)\" }"
+        - name: captcha
+          templateId: 156433
+        - name: ship
+          templateId: 158002
+        - name: refund
+          templateId: 159447
 
     # 微信模版通知配置
     # 微信模版用于通知客户或者运营者，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值

@@ -193,7 +193,7 @@ public class WxAuthController {
             return ResponseUtil.badArgumentValue();
         }
 
-        if (!notifyService.isSmsEnable()) {
+        if (!notifyService.isSmsEnable() || true) {
             return ResponseUtil.fail(AUTH_CAPTCHA_UNSUPPORT, "小程序后台验证码服务不支持");
         }
         String code = CharUtil.getRandomNum(6);
@@ -346,7 +346,7 @@ public class WxAuthController {
             return ResponseUtil.badArgument();
         }
 
-        if (!notifyService.isSmsEnable()) {
+        if (!notifyService.isSmsEnable() || true) {
             return ResponseUtil.fail(AUTH_CAPTCHA_UNSUPPORT, "小程序后台验证码服务不支持");
         }
         String code = CharUtil.getRandomNum(6);

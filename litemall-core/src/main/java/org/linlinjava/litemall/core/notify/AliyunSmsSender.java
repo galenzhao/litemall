@@ -25,17 +25,22 @@ public class AliyunSmsSender implements SmsSender {
 
     private IAcsClient client;
 
-    public IAcsClient getClient() {
-        if (client == null){
-            DefaultProfile profile = DefaultProfile.getProfile("default", config.getAppkey(), config.getSecret());
-            client = new DefaultAcsClient(profile);
-        }
-        return client;
-    }
+//    public IAcsClient getClient() {
+//
+//        return client;
+//    }
+//
+//    public void setClient(IAcsClient client) {
+//        this.client = client;
+//    }
 
     public AliyunSmsSender(NotifyProperties.Sms config) {
         this.config = config;
         logger.warn("aliyun sms config:\n" + new Gson().toJson(config));
+        if (client == null){
+            DefaultProfile profile = DefaultProfile.getProfile("default", config.getAppkey(), config.getSecret());
+            client = new DefaultAcsClient(profile);
+        }
     }
 
     @Override
@@ -76,7 +81,12 @@ public class AliyunSmsSender implements SmsSender {
 
         try {
             CommonResponse response = client.getCommonResponse(request);
-            System.out.println(response.getData());
+//            System.out.println(response.getData());
+
+            SmsResult smsResult = new SmsResult();
+            smsResult.setSuccessful("OK".equalsIgnoreCase(new Gson().fromJson(response.getData(), AliyunSmsResult.class).getCode()));
+            smsResult.setResult(response.getData());
+            return smsResult;
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {

@@ -201,7 +201,7 @@ public class AdminOrderService {
         //TODO 发送邮件和短信通知，这里采用异步发送
         // 发货会发送通知短信给用户:          *
         // "您的订单已经发货，快递公司 {1}，快递单 {2} ，请注意查收"
-        notifyService.notifySmsTemplate(order.getMobile(), NotifyType.SHIP, new String[]{shipChannel, shipSn});
+        notifyService.notifySmsTemplate(order.getMobile(), NotifyType.SHIP, new String[]{order.getOrderSn().substring(8, 14), shipChannel, shipSn});
 
         logHelper.logOrderSucceed("发货", "订单编号 " + orderId);
         return ResponseUtil.ok();

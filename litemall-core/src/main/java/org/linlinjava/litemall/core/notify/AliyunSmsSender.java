@@ -41,6 +41,16 @@ public class AliyunSmsSender implements SmsSender {
             DefaultProfile profile = DefaultProfile.getProfile("default", config.getAppkey(), config.getSecret());
             client = new DefaultAcsClient(profile);
         }
+
+        // test code
+        String[] params = new String[]{"1st param", "2nd"};
+        Map<String, String> values = new HashMap<String, String>();
+        for (int i = 0; i < params.length; i++) {
+            values.put("v"+i, params[i]);
+        }
+        StrSubstitutor sub = new StrSubstitutor(values, "%(", ")");
+        String result = sub.replace("{     \"status\": \"%(v0)\",      \"remark\": \"%(v1)\" }");
+        logger.warn(result);
     }
 
     @Override
@@ -49,10 +59,10 @@ public class AliyunSmsSender implements SmsSender {
     }
 
 
-    @Override
-    public SmsResult sendWithTemplate(String phone, int templateId, String[] params){
-        return null;
-    }
+//    @Override
+//    public SmsResult sendWithTemplate(String phone, int templateId, String[] params){
+//        return null;
+//    }
 
     @Override
     public SmsResult sendWithTemplate(String phone, int templateId, Map<String, String> smsTemplate, String[] params) {

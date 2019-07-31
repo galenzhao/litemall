@@ -682,7 +682,7 @@ public class WxOrderService {
         // 订单支付成功以后，会发送短信给用户，以及发送邮件给管理员
         notifyService.notifyMail("新订单通知", order.toString());
         // 这里微信的短信平台对参数长度有限制，所以将订单号只截取后6位
-        notifyService.notifySmsTemplateSync(order.getMobile(), NotifyType.PAY_SUCCEED, new String[]{orderSn.substring(8, 14)});
+        notifyService.notifySmsTemplateSync(order.getMobile(), NotifyType.PAY_SUCCEED, new String[]{"PAY_SUCCEED", orderSn.substring(8, 14)});
 
         // 请依据自己的模版消息配置更改参数
         String[] parms = new String[]{

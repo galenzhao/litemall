@@ -1,6 +1,12 @@
 var api = require('../config/api.js');
 var app = getApp();
 
+function nilString(str){
+  if(str)
+    return str;
+  return '';  
+}
+
 function formatTime(date) {
   var year = date.getFullYear()
   var month = date.getMonth() + 1
@@ -86,6 +92,7 @@ function showErrorToast(msg) {
 }
 
 module.exports = {
+  nilString,
   formatTime,
   request,
   redirect,

@@ -197,9 +197,9 @@ Page({
     });
   },
   aboutUs: function() {
-    wx.navigateTo({
-      url: '/pages/about/about'
-    });
+    // wx.navigateTo({
+    //   url: '/pages/about/about'
+    // });
   },
   goHelp: function () {
     wx.navigateTo({

@@ -165,10 +165,11 @@ Page({
           specificationList: res.data.specificationList,
           productList: res.data.productList,
           userHasCollect: res.data.userHasCollect,
-          shareImage: res.data.shareImage,
+          shareImage: util.nilString(res.data.shareImage),
           checkedSpecPrice: res.data.info.retailPrice,
           groupon: res.data.groupon,
           canShare: res.data.share,
+          // canShare: true,
         });
 
         //如果是通过分享的团购参加团购，则团购项目应该与分享的一致并且不可更改

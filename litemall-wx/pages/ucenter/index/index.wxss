@@ -161,3 +161,9 @@ page {
   color: red;
   font-size: 30rpx;
 }
+
+.version {
+  margin-top: 50rpx;
+  margin-bottom: 50rpx;
+  text-align: center;
+}

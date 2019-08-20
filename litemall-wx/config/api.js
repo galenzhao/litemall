@@ -7,8 +7,10 @@
 // var WxApiRoot = 'https://10318ed27ee74680aceaf7ef73d5990c-cn-beijing.alicloudapi.com/wx/';
 // 云平台上线时使用
 var WxApiRoot = 'https://mallapiwxa.dalianbbq.com/wx/';
+var JumpApiRoot = 'https://qrjump.dalianbbq.com/decode/';
 
 module.exports = {
+  DecodePageUrl: JumpApiRoot + 'page',
   IndexUrl: WxApiRoot + 'home/index', //首页数据接口
   CatalogList: WxApiRoot + 'catalog/index', //分类目录全部分类数据接口
   CatalogCurrent: WxApiRoot + 'catalog/current', //分类目录当前分类数据接口

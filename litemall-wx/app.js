@@ -1,9 +1,18 @@
 var util = require('./utils/util.js');
 var api = require('./config/api.js');
 var user = require('./utils/user.js');
-import Monitor from './utils/monitor';
+// import Monitor from './utils/monitor';
 
-App(Monitor.hookApp({
+const monitor = require('./agent/tingyun-mp-agent.js');
+monitor.config({
+  beacon: 'https://beaconbeta-mp.tingyun.com',
+  key: '14_CQi0MSjc',
+  id: 'W0j_6FLuu3M',
+  sampleRate: 1
+})
+
+// App(Monitor.hookApp({
+App({
   onError(err) {
     console.log('进入onError:', err);
   },
@@ -53,4 +62,5 @@ App(Monitor.hookApp({
   },
   onHide() {
   }
-}))
+})
+// }))

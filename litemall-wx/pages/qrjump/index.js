@@ -17,9 +17,16 @@ Page({
     }, 'POST').then(function (res) {
       if (res.errno === 0) {
         console.log(res)
-        wx.redirectTo({
-          url: res.page
-        })
+        if (res.page == '/pages/index/index'){
+          wx.switchTab({
+            url: '/pages/index/index'
+          })
+        }else{
+
+          wx.redirectTo({
+            url: res.page
+          })
+        }
       }
     });
   },

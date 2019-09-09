@@ -271,10 +271,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 39,
 					"name": "跳转测试",
 					"pathName": "pages/qrjump/index",
-					"query": "q=https%3A%2F%2Fqrjump.dalianbbq.com%2Fwxajump%2Fgood%2F101",
+					"query": "q=https%3A%2F%2Fqrjump.dalianbbq.com%2Fwxajump%2Fgood%2Fkmd241",
 					"scene": null
 				}
 			]

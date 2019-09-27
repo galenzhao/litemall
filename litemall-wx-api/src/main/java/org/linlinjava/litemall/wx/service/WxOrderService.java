@@ -331,10 +331,10 @@ public class WxOrderService {
         // 可以使用的其他钱，例如用户积分
 
         String auth = properties.getRefCodeAuth();
-        Integer refAmount = JacksonUtil.parseInteger(body, auth);
+        Float refAmount = JacksonUtil.parseObject(body, auth, Float.class);
         logger.info("get ref discount: "+auth+" and amount: "+refAmount);
         BigDecimal integralPrice = null;
-        if(refAmount!=null){
+        if(refAmount!=null && refAmount>Float.valueOf(0.01f)){
             if(refAmount > Integer.valueOf(1)) {
                 integralPrice = new BigDecimal(refAmount);
             }else{
@@ -358,7 +358,7 @@ public class WxOrderService {
         order.setMobile(checkedAddress.getTel());
         order.setMessage(refCode+"|"+message);
 
-        logger.info("refCode: "+order.getMessage());
+        logger.info("refCode: "+order.getMessage()+" and discount: "+integralPrice);
 
         String detailedAddress = checkedAddress.getProvince() + checkedAddress.getCity() + checkedAddress.getCounty() + " " + checkedAddress.getAddressDetail();
         order.setAddress(detailedAddress);

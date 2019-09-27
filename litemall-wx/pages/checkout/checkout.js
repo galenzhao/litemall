@@ -18,6 +18,7 @@ Page({
     addressId: 0,
     couponId: 0,
     message: '',
+    refCode: '',
     grouponLinkId: 0, //参与的团购，如果是发起则为0
     grouponRulesId: 0 //团购规则ID
   },
@@ -66,6 +67,11 @@ Page({
   bindMessageInput: function(e) {
     this.setData({
       message: e.detail.value
+    });
+  },
+  bindCouponInput: function(e){
+    this.setData({
+      refCode: e.detail.value
     });
   },
   onReady: function() {
@@ -132,6 +138,7 @@ Page({
       addressId: this.data.addressId,
       couponId: this.data.couponId,
       message: this.data.message,
+      refCode: this.data.refCode,
       grouponRulesId: this.data.grouponRulesId,
       grouponLinkId: this.data.grouponLinkId
     }, 'POST').then(res => {

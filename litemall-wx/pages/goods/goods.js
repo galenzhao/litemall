@@ -6,6 +6,15 @@ var user = require('../../utils/user.js');
 
 Page({
   data: {
+    header: {
+      homeCapsule: true,
+      // title: '标题',
+      fontColor: "#000",
+      fontSize: '36rpx',
+      // headerbg: '#f40',
+      hiddenBlock: true,
+      slot: false
+    },
     canShare: false,
     id: 0,
     goods: {},

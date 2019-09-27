@@ -17,15 +17,22 @@ Page({
     }, 'POST').then(function (res) {
       if (res.errno === 0) {
         console.log(res)
-        if (res.page == '/pages/index/index'){
+        if(res.tab && res.tab == true){
           wx.switchTab({
-            url: '/pages/index/index'
+            url: res.page
           })
         }else{
 
-          wx.redirectTo({
-            url: res.page
-          })
+          if (res.page == '/pages/index/index') {
+            wx.switchTab({
+              url: '/pages/index/index'
+            })
+          } else {
+
+            wx.redirectTo({
+              url: res.page
+            })
+          }
         }
       }
     });

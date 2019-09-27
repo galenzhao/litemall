@@ -340,7 +340,7 @@ public class WxOrderService {
                 integralPrice = orderTotalPrice.multiply(new BigDecimal(refAmount));
             }
         }else {
-            new BigDecimal(0.00);
+            integralPrice = new BigDecimal(0.00);
         }
 
         // 最终支付费用

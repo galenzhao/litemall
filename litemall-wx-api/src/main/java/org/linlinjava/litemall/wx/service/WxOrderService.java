@@ -343,6 +343,9 @@ public class WxOrderService {
         order.setConsignee(checkedAddress.getName());
         order.setMobile(checkedAddress.getTel());
         order.setMessage(refCode+"|"+message);
+
+        logger.info("refCode: "+order.getMessage());
+
         String detailedAddress = checkedAddress.getProvince() + checkedAddress.getCity() + checkedAddress.getCounty() + " " + checkedAddress.getAddressDetail();
         order.setAddress(detailedAddress);
         order.setGoodsPrice(checkedGoodsPrice);

@@ -244,6 +244,13 @@ public class WxOrderService {
         Integer addressId = JacksonUtil.parseInteger(body, "addressId");
         Integer couponId = JacksonUtil.parseInteger(body, "couponId");
         String message = JacksonUtil.parseString(body, "message");
+        String refCode = JacksonUtil.parseString(body, "refCode");
+        if (message==null){
+            message = "";
+        }
+        if (refCode==null){
+            refCode = "";
+        }
         Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
         Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
 
@@ -335,7 +342,7 @@ public class WxOrderService {
         order.setOrderStatus(OrderUtil.STATUS_CREATE);
         order.setConsignee(checkedAddress.getName());
         order.setMobile(checkedAddress.getTel());
-        order.setMessage(message);
+        order.setMessage(refCode+"|"+message);
         String detailedAddress = checkedAddress.getProvince() + checkedAddress.getCity() + checkedAddress.getCounty() + " " + checkedAddress.getAddressDetail();
         order.setAddress(detailedAddress);
         order.setGoodsPrice(checkedGoodsPrice);

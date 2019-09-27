@@ -19,6 +19,15 @@ public class WxProperties {
 
     private String keyPath;
     private String callbackAuth;
+    private String refCodeAuth;
+
+    public String getRefCodeAuth() {
+        return refCodeAuth;
+    }
+
+    public void setRefCodeAuth(String refCodeAuth) {
+        this.refCodeAuth = refCodeAuth;
+    }
 
     public String getCallbackAuth() {
         return callbackAuth;

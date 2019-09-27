@@ -45,6 +45,8 @@
 
   <view class="message-box">
     <input class="message-item" bindinput="bindMessageInput" placeholder="如需要，请输入留言" value="{{message}}" />
+  </view>
+  <view class="message-box">
     <input class='message-item' bindinput='bindCouponInput' placeholder='如有邀请码，请输入' value="{{refCode}}"></input>
   </view>
 

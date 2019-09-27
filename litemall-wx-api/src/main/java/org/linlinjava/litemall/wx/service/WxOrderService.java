@@ -325,11 +325,24 @@ public class WxOrderService {
             freightPrice = SystemConfig.getFreight();
         }
 
-        // 可以使用的其他钱，例如用户积分
-        BigDecimal integralPrice = new BigDecimal(0.00);
-
         // 订单费用
         BigDecimal orderTotalPrice = checkedGoodsPrice.add(freightPrice).subtract(couponPrice).max(new BigDecimal(0.00));
+
+        // 可以使用的其他钱，例如用户积分
+
+        String auth = properties.getRefCodeAuth();
+        Integer refAmount = JacksonUtil.parseInteger(body, auth);
+        BigDecimal integralPrice = null;
+        if(refAmount!=null){
+            if(refAmount > Integer.valueOf(1)) {
+                integralPrice = new BigDecimal(refAmount);
+            }else{
+                integralPrice = orderTotalPrice.multiply(new BigDecimal(refAmount));
+            }
+        }else {
+            new BigDecimal(0.00);
+        }
+
         // 最终支付费用
         BigDecimal actualPrice = orderTotalPrice.subtract(integralPrice);
 

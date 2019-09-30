@@ -332,10 +332,15 @@ public class WxOrderService {
         // 可以使用的其他钱，例如用户积分
 
         String auth = properties.getRefCodeAuth();
-        Float refAmount = JacksonUtil.parseObject(body, auth, Float.class);
+        Float refAmount = null;
+        try {
+            refAmount = JacksonUtil.parseObject(body, auth, Float.class);
+            logger.info("get ref discount: "+auth+" and amount: "+refAmount);
+        }catch (Exception e){
+            logger.info(e);
+        }
         BigDecimal integralPrice = null;
         if(refAmount!=null && refAmount>Float.valueOf(0.01f)){
-            logger.info("get ref discount: "+auth+" and amount: "+refAmount);
             if(refAmount > Integer.valueOf(1)) {
                 integralPrice = new BigDecimal(refAmount);
             }else{

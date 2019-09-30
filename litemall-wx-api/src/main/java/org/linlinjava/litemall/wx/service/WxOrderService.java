@@ -332,9 +332,9 @@ public class WxOrderService {
 
         String auth = properties.getRefCodeAuth();
         Float refAmount = JacksonUtil.parseObject(body, auth, Float.class);
-        logger.info("get ref discount: "+auth+" and amount: "+refAmount);
         BigDecimal integralPrice = null;
         if(refAmount!=null && refAmount>Float.valueOf(0.01f)){
+            logger.info("get ref discount: "+auth+" and amount: "+refAmount);
             if(refAmount > Integer.valueOf(1)) {
                 integralPrice = new BigDecimal(refAmount);
             }else{

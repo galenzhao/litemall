@@ -1,5 +1,7 @@
 package org.linlinjava.litemall.core.notify;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
@@ -21,6 +23,8 @@ public class NotifyService {
 
     private WxTemplateSender wxTemplateSender;
     private List<Map<String, String>> wxTemplate = new ArrayList<>();
+
+    private final Log logger = LogFactory.getLog(NotifyService.class);
 
     public boolean isMailEnable() {
         return mailSender != null;
@@ -135,6 +139,7 @@ public class NotifyService {
     public void notifyMail(String subject, String content) {
         // todo post webhook
 
+        logger.warn("mail subject:"+subject);
         if (mailSender == null)
             return;
 
@@ -144,6 +149,7 @@ public class NotifyService {
         message.setSubject(subject);
         message.setText(content);
         mailSender.send(message);
+        logger.warn("mail sent!");
     }
     private Map<String, String> getTemplate(NotifyType notifyType, List<Map<String, String>> values){
         for (Map<String, String> item : values) {
@@ -168,6 +174,8 @@ public class NotifyService {
     }
 
     public void setMailSender(MailSender mailSender) {
+
+
         this.mailSender = mailSender;
     }
 

@@ -156,6 +156,7 @@ public class WxOrderService {
                 orderGoodsVo.put("number", orderGoods.getNumber());
                 orderGoodsVo.put("picUrl", orderGoods.getPicUrl());
                 orderGoodsVo.put("specifications", orderGoods.getSpecifications());
+                orderGoodsVo.put("price",orderGoods.getPrice());
                 orderGoodsVoList.add(orderGoodsVo);
             }
             orderVo.put("goodsList", orderGoodsVoList);
@@ -331,8 +332,13 @@ public class WxOrderService {
         // 可以使用的其他钱，例如用户积分
 
         String auth = properties.getRefCodeAuth();
-        Float refAmount = JacksonUtil.parseObject(body, auth, Float.class);
-        logger.info("get ref discount: "+auth+" and amount: "+refAmount);
+        Float refAmount = null;
+        try {
+            refAmount = JacksonUtil.parseObject(body, auth, Float.class);
+            logger.info("get ref discount: "+auth+" and amount: "+refAmount);
+        }catch (Exception e){
+            logger.info(e);
+        }
         BigDecimal integralPrice = null;
         if(refAmount!=null && refAmount>Float.valueOf(0.01f)){
             if(refAmount > Integer.valueOf(1)) {
@@ -654,7 +660,7 @@ public class WxOrderService {
         }
 
         // 检查这个订单是否已经处理过
-        if (OrderUtil.isPayStatus(order) && order.getPayId() != null) {
+        if (OrderUtil.hasPayed(order)) {
             return WxPayNotifyResponse.success("订单已经处理成功!");
         }
 

@@ -12,17 +12,18 @@
 }
 
 .navbar_home image:first-child {
-  width: 21rpx;
+  width: 73rpx;
   height: 34rpx;
-  padding: 0 32rpx;
+  padding: 0 20rpx;
   border-right: 1px solid rgba(255,255,255,0.2);
 }
 
 .navbar_home image:last-child {
-  width: 37rpx;
+  width: 75rpx;
   height: 35rpx;
-  padding: 0 32rpx;
+  padding: 0 20rpx;
 }
+
 .topbar {
   position: fixed;
   left: 0;

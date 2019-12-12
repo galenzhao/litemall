@@ -1,6 +1,9 @@
 package org.linlinjava.litemall.core.notify.config;
 
 import com.github.qcloudsms.SmsSingleSender;
+import com.google.gson.Gson;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.notify.AliyunSmsSender;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.TencentSmsSender;
@@ -14,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 @EnableConfigurationProperties(NotifyProperties.class)
 public class NotifyAutoConfiguration {
+    private final Log logger = LogFactory.getLog(NotifyAutoConfiguration.class);
 
     private final NotifyProperties properties;
 
@@ -30,6 +34,7 @@ public class NotifyAutoConfiguration {
             notifyService.setMailSender(mailSender());
             notifyService.setSendFrom(mailConfig.getSendfrom());
             notifyService.setSendTo(mailConfig.getSendto());
+            logger.warn("config mail sender: "+ new Gson().toJson(mailConfig));
         }
 
         NotifyProperties.Sms smsConfig = properties.getSms();

@@ -110,6 +110,12 @@ public class WxOrderController {
      *
      *
      */
+
+    @PostMapping("payjspay")
+    public Object payjspay(@LoginUser Integer userId, @RequestBody String body, HttpServletRequest request){
+        return wxOrderService.payjs(userId, body, request);
+    }
+
     @PostMapping("payjs-pay")
     public Object payjs(@LoginUser Integer userId, @RequestBody String body, HttpServletRequest request){
         return wxOrderService.payjs(userId, body, request);

@@ -53,21 +53,22 @@ public class TencentSmsSender implements SmsSender {
 
 //        @Override
     private SmsResult sendWithTemplate(String phone, int templateId, String[] params) {
-        try {
-            SmsSingleSenderResult result = sender.sendWithParam("86", phone, Integer.parseInt(templateId), params, this.sign, "", "");
-            logger.debug(result);
-
-            SmsResult smsResult = new SmsResult();
-            smsResult.setSuccessful(true);
-            smsResult.setResult(result);
-            return smsResult;
-        } catch (HTTPException | IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-
-        SmsResult smsResult = new SmsResult();
-        smsResult.setSuccessful(false);
-        return smsResult;
+//        try {
+//            SmsSingleSenderResult result = sender.sendWithParam("86", phone, Integer.parseInt(templateId), params, this.sign, "", "");
+//            logger.debug(result);
+//
+//            SmsResult smsResult = new SmsResult();
+//            smsResult.setSuccessful(true);
+//            smsResult.setResult(result);
+//            return smsResult;
+//        } catch (HTTPException | IOException e) {
+//            logger.error(e.getMessage(), e);
+//        }
+//
+//        SmsResult smsResult = new SmsResult();
+//        smsResult.setSuccessful(false);
+//        return smsResult;
+        return null;
     }
 
     public void setSign(String sign) {

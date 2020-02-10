@@ -101,6 +101,22 @@ public class NotifyProperties {
         private String sign;
         private List<Map<String, String>> template = new ArrayList<>();
 
+        public int getAppid() {
+            return appid;
+        }
+
+        public void setAppid(int appid) {
+            this.appid = appid;
+        }
+
+        public String getAppkey() {
+            return appkey;
+        }
+
+        public void setAppkey(String appkey) {
+            this.appkey = appkey;
+        }
+
         public String getType() {
             return type;
         }
@@ -125,13 +141,13 @@ public class NotifyProperties {
             this.template = template;
         }
 
-        public String getActive() {
-            return active;
-        }
+//        public String getActive() {
+//            return active;
+//        }
 
-        public void setActive(String active) {
-            this.active = active;
-        }
+//        public void setActive(String active) {
+//            this.active = active;
+//        }
 
         public String getSecret() {
             return secret;
@@ -149,29 +165,29 @@ public class NotifyProperties {
             this.sign = sign;
         }
 
-        public List<Map<String, String>> getTemplate() {
-            return template;
-        }
+//        public List<Map<String, String>> getTemplate() {
+//            return template;
+//        }
 
-        public void setSign(String sign) {
-            this.sign = sign;
-        }
+//        public void setSign(String sign) {
+//            this.sign = sign;
+//        }
 
-        public Tencent getTencent() {
-            return tencent;
-        }
+//        public Tencent getTencent() {
+//            return tencent;
+//        }
 
-        public void setTencent(Tencent tencent) {
-            this.tencent = tencent;
-        }
+//        public void setTencent(Tencent tencent) {
+//            this.tencent = tencent;
+//        }
 
-        public Aliyun getAliyun() {
-            return aliyun;
-        }
+//        public Aliyun getAliyun() {
+//            return aliyun;
+//        }
 
-        public void setAliyun(Aliyun aliyun) {
-            this.aliyun = aliyun;
-        }
+//        public void setAliyun(Aliyun aliyun) {
+//            this.aliyun = aliyun;
+//        }
 
         public static class Tencent {
             private int appid;

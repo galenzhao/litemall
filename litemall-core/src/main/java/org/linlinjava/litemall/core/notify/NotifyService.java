@@ -97,11 +97,11 @@ public class NotifyService {
      */
     @Async
     public void notifyWxTemplate(String touser, NotifyType notifyType, String[] params) {
-        if (wxTemplateSender == null)
-            return;
-
-        String templateId = getTemplateId(notifyType, wxTemplate);
-        wxTemplateSender.sendWechatMsg(touser, templateId, params);
+//        if (wxTemplateSender == null)
+//            return;
+//
+//        String templateId = getTemplateId(notifyType, wxTemplate);
+//        wxTemplateSender.sendWechatMsg(touser, templateId, params);
     }
 
     /**
@@ -116,11 +116,11 @@ public class NotifyService {
      */
     @Async
     public void notifyWxTemplate(String touser, NotifyType notifyType, String[] params, String page) {
-        if (wxTemplateSender == null)
-            return;
-
-        String templateId = getTemplateId(notifyType, wxTemplate);
-        wxTemplateSender.sendWechatMsg(touser, templateId, params, page);
+//        if (wxTemplateSender == null)
+//            return;
+//
+//        String templateId = getTemplateId(notifyType, wxTemplate);
+//        wxTemplateSender.sendWechatMsg(touser, templateId, params, page);
     }
 
     /**

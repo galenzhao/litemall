@@ -74,22 +74,22 @@ public class NotifyAutoConfiguration {
     public TencentSmsSender tencentSmsSender() {
         NotifyProperties.Sms smsConfig = properties.getSms();
         TencentSmsSender smsSender = new TencentSmsSender();
-        NotifyProperties.Sms.Tencent tencent = smsConfig.getTencent();
-        smsSender.setSender(new SmsSingleSender(tencent.getAppid(), tencent.getAppkey()));
-        smsSender.setSign(smsConfig.getSign());
+//        NotifyProperties.Sms.Tencent tencent = smsConfig.getTencent();
+//        smsSender.setSender(new SmsSingleSender(tencent.getAppid(), tencent.getAppkey()));
+//        smsSender.setSign(smsConfig.getSign());
         return smsSender;
     }
 
-    public AliyunSmsSender aliyunSmsSender() {
-        NotifyProperties.Sms smsConfig = properties.getSms();
-        AliyunSmsSender smsSender = new AliyunSmsSender();
-        NotifyProperties.Sms.Aliyun aliyun = smsConfig.getAliyun();
-        smsSender.setSign(smsConfig.getSign());
-        smsSender.setRegionId(aliyun.getRegionId());
-        smsSender.setAccessKeyId(aliyun.getAccessKeyId());
-        smsSender.setAccessKeySecret(aliyun.getAccessKeySecret());
-        return smsSender;
-    }
+//    public AliyunSmsSender aliyunSmsSender() {
+//        NotifyProperties.Sms smsConfig = properties.getSms();
+//        AliyunSmsSender smsSender = new AliyunSmsSender();
+//        NotifyProperties.Sms.Aliyun aliyun = smsConfig.getAliyun();
+//        smsSender.setSign(smsConfig.getSign());
+//        smsSender.setRegionId(aliyun.getRegionId());
+//        smsSender.setAccessKeyId(aliyun.getAccessKeyId());
+//        smsSender.setAccessKeySecret(aliyun.getAccessKeySecret());
+//        return smsSender;
+//    }
 
     @Bean
     public AliyunSmsSender aliyunSmsSender(){

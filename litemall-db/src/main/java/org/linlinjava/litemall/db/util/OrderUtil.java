@@ -27,10 +27,10 @@ public class OrderUtil {
     public static final Short STATUS_CONFIRM = 401;
     public static final Short STATUS_CANCEL = 102;
     public static final Short STATUS_AUTO_CANCEL = 103;
+    public static final Short STATUS_ADMIN_CANCEL = 104;
     public static final Short STATUS_REFUND = 202;
     public static final Short STATUS_REFUND_CONFIRM = 203;
     public static final Short STATUS_AUTO_CONFIRM = 402;
-
 
     public static String orderStatusText(LitemallOrder order) {
         int status = order.getOrderStatus().intValue();
@@ -57,6 +57,10 @@ public class OrderUtil {
 
         if (status == 203) {
             return "已退款";
+        }
+
+        if (status == 204) {
+            return "已超时团购";
         }
 
         if (status == 301) {
@@ -89,7 +93,7 @@ public class OrderUtil {
         } else if (status == 201) {
             // 如果订单已付款，没有发货，则可退款
             handleOption.setRefund(true);
-        } else if (status == 202) {
+        } else if (status == 202 || status == 204) {
             // 如果订单申请退款中，没有相关操作
         } else if (status == 203) {
             // 如果订单已经退款，则可删除
@@ -99,10 +103,11 @@ public class OrderUtil {
             // 此时不能取消订单
             handleOption.setConfirm(true);
         } else if (status == 401 || status == 402) {
-            // 如果订单已经支付，且已经收货，则可删除、去评论和再次购买
+            // 如果订单已经支付，且已经收货，则可删除、去评论、申请售后和再次购买
             handleOption.setDelete(true);
             handleOption.setComment(true);
             handleOption.setRebuy(true);
+            handleOption.setAftersale(true);
         } else {
             throw new IllegalStateException("status不支持");
         }

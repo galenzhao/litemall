@@ -2,7 +2,7 @@
 // 本机开发时使用
 // var WxApiRoot = 'http://localhost:8080/wx/';
 // 局域网测试使用
-// var WxApiRoot = 'http://192.168.0.101:8080/wx/';
+var WxApiRoot = 'http://192.168.1.3:8080/wx/';
 // 云平台部署时使用
 // var WxApiRoot = 'https://10318ed27ee74680aceaf7ef73d5990c-cn-beijing.alicloudapi.com/wx/';
 // 云平台上线时使用
@@ -12,6 +12,8 @@ var JumpApiRoot = 'https://qrjump.dalianbbq.com/decode/';
 module.exports = {
   DecodePageUrl: JumpApiRoot + 'page',
   IndexUrl: WxApiRoot + 'home/index', //首页数据接口
+  AboutUrl: WxApiRoot + 'home/about', //介绍信息
+
   CatalogList: WxApiRoot + 'catalog/index', //分类目录全部分类数据接口
   CatalogCurrent: WxApiRoot + 'catalog/current', //分类目录当前分类数据接口
 
@@ -77,11 +79,13 @@ module.exports = {
   OrderGoods: WxApiRoot + 'order/goods', // 代评价商品信息
   OrderComment: WxApiRoot + 'order/comment', // 评价订单商品信息
 
+  AftersaleSubmit: WxApiRoot + 'aftersale/submit', // 提交售后申请
+  AftersaleList: WxApiRoot + 'aftersale/list', // 售后列表
+  AftersaleDetail: WxApiRoot + 'aftersale/detail', // 售后详情
+
   FeedbackAdd: WxApiRoot + 'feedback/submit', //添加反馈
   FootprintList: WxApiRoot + 'footprint/list', //足迹列表
   FootprintDelete: WxApiRoot + 'footprint/delete', //删除足迹
-
-  UserFormIdCreate: WxApiRoot + 'formid/create', //用户FromId，用于发送模版消息
 
   GroupOnList: WxApiRoot + 'groupon/list', //团购列表
   GroupOnMy: WxApiRoot + 'groupon/my', //团购API-我的团购
@@ -98,5 +102,4 @@ module.exports = {
 
   UserIndex: WxApiRoot + 'user/index', //个人页面用户相关信息
   IssueList: WxApiRoot + 'issue/list', //帮助信息
-
 };

@@ -21,7 +21,6 @@ public class NotifyService {
     private SmsSender smsSender;
     private List<Map<String, String>> smsTemplate = new ArrayList<>();
 
-    private WxTemplateSender wxTemplateSender;
     private List<Map<String, String>> wxTemplate = new ArrayList<>();
 
     private final Log logger = LogFactory.getLog(NotifyService.class);
@@ -32,10 +31,6 @@ public class NotifyService {
 
     public boolean isSmsEnable() {
         return smsSender != null;
-    }
-
-    public boolean isWxEnable() {
-        return wxTemplateSender != null;
     }
 
     /**
@@ -193,10 +188,6 @@ public class NotifyService {
 
     public void setSmsTemplate(List<Map<String, String>> smsTemplate) {
         this.smsTemplate = smsTemplate;
-    }
-
-    public void setWxTemplateSender(WxTemplateSender wxTemplateSender) {
-        this.wxTemplateSender = wxTemplateSender;
     }
 
     public void setWxTemplate(List<Map<String, String>> wxTemplate) {

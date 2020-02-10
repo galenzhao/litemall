@@ -1,9 +1,9 @@
-// about.js
-var app = getApp()
-var util = require("../../utils/util.js");
+const util = require('../../utils/util.js');
+const api = require('../../config/api.js');
 
+//获取应用实例
+const app = getApp();
 
-var api = require("../../config/api.js");
 Page({
 
   /**
@@ -25,25 +25,36 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    this.getAbout()
   },
-
+  getAbout: function () {
+    let that = this;
+    util.request(api.AboutUrl).then(function (res) {
+      if (res.errno === 0) {
+        that.setData({
+          name: res.data.name,
+          address: res.data.address,
+          phone: res.data.phone,
+          qq: res.data.qq,
+          latitude: res.data.latitude,
+          longitude: res.data.longitude
+        });
+      }
+    });
+  },
   showLocation: function (e) {
     var that = this
     wx.openLocation({
-      latitude: that.data.shopInfo.latitude,
-      longitude: that.data.shopInfo.longitude,
-      name: that.data.shopInfo.name,
-      address: that.data.shopInfo.address,
+      latitude: parseFloat(that.data.latitude),
+      longitude: parseFloat(that.data.longitude),
+      name: that.data.name,
+      address: that.data.address,
     })
   },
   callPhone: function (e) {
     var that = this
     wx.makePhoneCall({
-      phoneNumber: that.data.shopInfo.linkPhone,
+      phoneNumber: that.data.phone,
     })
-  },
-  reLoad: function (e) {
-    this.loadShopInfo();
   }
 })

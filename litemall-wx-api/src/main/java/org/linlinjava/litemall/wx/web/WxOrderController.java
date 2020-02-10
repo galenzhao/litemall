@@ -105,6 +105,17 @@ public class WxOrderController {
     }
 
     /**
+     * payjs payment
+     *
+     *
+     *
+     */
+    @PostMapping("payjs-pay")
+    public Object payjs(@LoginUser Integer userId, @RequestBody String body, HttpServletRequest request){
+        return wxOrderService.payjs(userId, body, request);
+    }
+
+    /**
      * 微信付款成功或失败回调接口
      * <p>
      *  TODO

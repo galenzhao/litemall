@@ -9,6 +9,8 @@ import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.xuzhiguang.payjs.sdk.PayJs;
+import com.xuzhiguang.payjs.sdk.bean.CashierRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,7 +74,6 @@ import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 @Service
 public class WxOrderService {
     private final Log logger = LogFactory.getLog(WxOrderService.class);
-
     @Autowired
     private WxProperties properties;
 
@@ -633,6 +634,85 @@ public class WxOrderService {
             return ResponseUtil.updatedDateExpired();
         }
         return ResponseUtil.ok(result);
+    }
+
+    /**
+     * payjs pay
+     */
+    @Transactional
+    public Object payjs(Integer userId, String body, HttpServletRequest request) {
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        if (orderId == null) {
+            return ResponseUtil.badArgument();
+        }
+
+        LitemallOrder order = orderService.findById(orderId);
+        if (order == null) {
+            return ResponseUtil.badArgumentValue();
+        }
+        if (!order.getUserId().equals(userId)) {
+            return ResponseUtil.badArgumentValue();
+        }
+
+        // 检测是否能够取消
+        OrderHandleOption handleOption = OrderUtil.build(order);
+        if (!handleOption.isPay()) {
+            return ResponseUtil.fail(ORDER_INVALID_OPERATION, "订单不能支付");
+        }
+
+
+
+
+        String mchid = properties.getPayjsmchid();
+
+        String key = properties.getPayjskey();
+
+        PayJs payJs = new PayJs(mchid, key);
+        String payUrl = null;
+
+//        WxPayMwebOrderResult result = null;
+        try {
+//            WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
+//            orderRequest.setOutTradeNo(order.getOrderSn());
+//            orderRequest.setTradeType("MWEB");
+//            orderRequest.setBody("订单：" + order.getOrderSn());
+//            // 元转成分
+            int fee = 0;
+            BigDecimal actualPrice = order.getActualPrice();
+            fee = actualPrice.multiply(new BigDecimal(100)).intValue();
+//            orderRequest.setTotalFee(fee);
+//            orderRequest.setSpbillCreateIp(IpUtil.getIpAddr(request));
+//
+//            result = wxPayService.createOrder(orderRequest);
+
+            CashierRequest checkout = new CashierRequest();
+            checkout.setAttach(properties.getPayjsTitle());
+            checkout.setBody(properties.getPayjsBody());
+            // 回调地址
+            checkout.setNotifyUrl(properties.getPayjsNotify());
+            // 页面跳转地址，支付成功后会跳转到该地址
+            checkout.setCallbackUrl(properties.getPayjsRedirect());
+            // auto=1：无需点击支付按钮，自动发起支付。默认手动点击发起支付
+            checkout.setAuto(1);
+            // hide=1：隐藏收银台背景界面。默认显示背景界面（这里hide为1时，自动忽略auto参数）
+            checkout.setHide(1);
+            // 订单号
+            checkout.setOutTradeNo(order.getOrderSn());
+            // 订单金额，单位（分）
+            checkout.setTotalFee(fee);
+
+            // 直接返回收银台支付url，请前台直接跳转
+            payUrl = payJs.cashier(checkout);
+
+            logger.info("支付url为:{"+ payUrl+"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseUtil.ok(payUrl);
     }
 
     /**

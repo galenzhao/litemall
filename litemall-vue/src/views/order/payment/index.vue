@@ -23,6 +23,13 @@
             </template>
             <van-radio name="ali"/>
           </van-cell>
+
+          <van-cell>
+            <template slot="title">
+              <img src="../../../assets/images/wx_pay.png" alt="微信支付(PAYJS)" width="113" height="23">
+            </template>            
+            <van-radio name="payjs"/>
+          </van-cell>
           <van-cell>
             <template slot="title">
               <img src="../../../assets/images/wx_pay.png" alt="微信支付" width="113" height="23">
@@ -39,7 +46,7 @@
 
 <script>
 import { Radio, RadioGroup, Dialog } from 'vant';
-import { orderDetail, orderPrepay, orderH5pay } from '@/api/api';
+import { orderDetail, orderPrepay, orderH5pay, orderPayjspay } from '@/api/api';
 import _ from 'lodash';
 import { getLocalStorage, setLocalStorage } from '@/utils/local-storage';
 
@@ -71,7 +78,7 @@ export default {
     pay() {
       
       Dialog.alert({
-        message: '你选择了' + (this.payWay === 'wx' ? '微信支付' : '支付宝支付')
+        message: '你选择了' + (this.payWay === 'wx' ? '微信支付' : this.payWay === 'payjs' ? '微信支付PAYJS' : '支付宝支付')
       }).then(() => {
         if (this.payWay === 'wx') {
           let ua = navigator.userAgent.toLowerCase();
@@ -139,8 +146,30 @@ export default {
                 Dialog.alert({ message: err.data.errmsg });
               });
           }
-        } else {
+        } else if(this.payWay === 'payjs') {
           //todo : alipay
+
+            orderPayjspay({ orderId: this.orderId })
+              .then(res => {
+                let data = res.data.data;
+                Dialog.alert({message: data}).then(() => {
+                  window.location.replace(data);
+                });
+
+                // window.location.replace(
+                //   data.mwebUrl +
+                //   '&redirect_url=' +
+                //   encodeURIComponent(
+                //     window.location.origin +
+                //     '/#/?orderId=' +
+                //     this.orderId +
+                //     '&tip=yes'
+                //   )
+                // );
+              })
+              .catch(err => {
+                Dialog.alert({ message: err.data.errmsg });
+              });
         }
       });
     },

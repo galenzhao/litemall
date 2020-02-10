@@ -307,6 +307,15 @@ export function orderPrepay(data) {
     data
   })
 }
+
+const OrderPayjspay = 'wx/order/payjs-pay'; // h5支付
+export function orderPayjspay(data) {
+  return request({
+    url: OrderPayjspay,
+    method: 'post',
+    data
+  });
+}
 const OrderH5pay = 'wx/order/h5pay'; // h5支付
 export function orderH5pay(data) {
   return request({

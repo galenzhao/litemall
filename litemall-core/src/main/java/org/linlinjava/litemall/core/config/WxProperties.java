@@ -21,6 +21,61 @@ public class WxProperties {
     private String callbackAuth;
     private String refCodeAuth;
 
+    private String payjsmchid;
+    private String payjskey;
+    private String payjsTitle;
+    private String payjsBody;
+    private String payjsRedirect;
+    private String payjsNotify;
+
+    public String getPayjsTitle() {
+        return payjsTitle;
+    }
+
+    public void setPayjsTitle(String payjsTitle) {
+        this.payjsTitle = payjsTitle;
+    }
+
+    public String getPayjsBody() {
+        return payjsBody;
+    }
+
+    public void setPayjsBody(String payjsBody) {
+        this.payjsBody = payjsBody;
+    }
+
+    public String getPayjsRedirect() {
+        return payjsRedirect;
+    }
+
+    public void setPayjsRedirect(String payjsRedirect) {
+        this.payjsRedirect = payjsRedirect;
+    }
+
+    public String getPayjsNotify() {
+        return payjsNotify;
+    }
+
+    public void setPayjsNotify(String payjsNotify) {
+        this.payjsNotify = payjsNotify;
+    }
+
+    public String getPayjsmchid() {
+        return payjsmchid;
+    }
+
+    public void setPayjsmchid(String payjsmchid) {
+        this.payjsmchid = payjsmchid;
+    }
+
+    public String getPayjskey() {
+        return payjskey;
+    }
+
+    public void setPayjskey(String payjskey) {
+        this.payjskey = payjskey;
+    }
+
     public String getRefCodeAuth() {
         return refCodeAuth;
     }

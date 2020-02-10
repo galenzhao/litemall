@@ -89,6 +89,9 @@ public class AdminAuthController {
         Map<Object, Object> result = new HashMap<Object, Object>();
         result.put("token", currentUser.getSession().getId());
         result.put("adminInfo", adminInfo);
+
+        // SET SESSION TIMEOUT
+        currentUser.getSession().setTimeout(1000l*60*60*24);
         return ResponseUtil.ok(result);
     }
 

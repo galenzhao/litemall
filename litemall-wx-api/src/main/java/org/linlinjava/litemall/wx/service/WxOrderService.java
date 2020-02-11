@@ -1,5 +1,6 @@
 package org.linlinjava.litemall.wx.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
@@ -11,6 +12,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.xuzhiguang.payjs.sdk.PayJs;
 import com.xuzhiguang.payjs.sdk.bean.CashierRequest;
+import com.xuzhiguang.payjs.sdk.util.SignUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -902,6 +904,156 @@ public class WxOrderService {
         return WxPayNotifyResponse.success("处理成功!");
     }
 
+    @Transactional
+    public Object payjsNotify(HttpServletRequest request, HttpServletResponse response) {
+//        String auth = properties.getCallbackAuth();
+//        String header = request.getHeader("x-wx-callback-auth");
+//
+//        boolean check = false;
+//        if(auth!=null && header!=null){
+//            if(auth.equalsIgnoreCase(header)){
+//                check = true;
+//            }
+//        }else{
+//
+//        }
+//        if (check == false){
+//            return WxPayNotifyResponse.fail("no auth code!");
+//        }
+        String xmlResult = null;
+        try {
+            logger.error("encoding: "+request.getCharacterEncoding());
+            xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return WxPayNotifyResponse.fail(e.getMessage());
+        }
+
+        logger.error("raw resp:\n"+xmlResult);
+
+        JSONObject jsonObject = JSONObject.parseObject(xmlResult);
+
+        logger.error("json data:"+ jsonObject);
+
+        String sign = SignUtil.getSign(jsonObject, properties.getPayjskey());
+        logger.error("get payback info:\n"+xmlResult+"\nwith sign:"+sign);
+        if (sign.equals(jsonObject.getString("sign"))){
+
+        }else{
+            return WxPayNotifyResponse.fail("no auth code! wrong sign key!");
+
+        }
+/*
+{
+  attach = "Doraamon",
+  mchid = "1511574221",
+  openid = "o7LFAwbaCIFlBhKcVXzqu6tf98I4",
+  out_trade_no = "20200211469415",
+  payjs_order_id = "2020021104374200697967146",
+  return_code = "1",
+  sign = "B69AF53388E11B98D1751A2F4E7B191B",
+  time_end = "2020-02-11 04:37:46",
+  total_fee = "1",
+  transaction_id = "4200000518202002113989270629"
+}
+ */
+//        WxPayOrderNotifyResult result = null;
+//        try {
+//            result = wxPayService.parseOrderNotifyResult(xmlResult);
+//
+//            if(!WxPayConstants.ResultCode.SUCCESS.equals(result.getResultCode())){
+//                logger.error(xmlResult);
+//                throw new WxPayException("微信通知支付失败！");
+//            }
+//            if(!WxPayConstants.ResultCode.SUCCESS.equals(result.getReturnCode())){
+//                logger.error(xmlResult);
+//                throw new WxPayException("微信通知支付失败！");
+//            }
+//        } catch (WxPayException e) {
+//            e.printStackTrace();
+//            return WxPayNotifyResponse.fail(e.getMessage());
+//        }
+
+        logger.info("处理腾讯支付平台的订单支付");
+//        logger.info(result);
+
+        String orderSn = jsonObject.getString("out_trade_no");//result.getOutTradeNo();
+        String payId = jsonObject.getString("transaction_id");//result.getTransactionId();
+
+        // 分转化成元
+        String totalFee = BaseWxPayResult.fenToYuan(Integer.valueOf(jsonObject.getString("total_fee")));
+        LitemallOrder order = orderService.findBySn(orderSn);
+        if (order == null) {
+            return WxPayNotifyResponse.fail("订单不存在 sn=" + orderSn);
+        }
+
+        // 检查这个订单是否已经处理过
+        if (OrderUtil.hasPayed(order)) {
+            return WxPayNotifyResponse.success("订单已经处理成功!");
+        }
+
+        // 检查支付订单金额
+        if (!totalFee.equals(order.getActualPrice().toString())) {
+            return WxPayNotifyResponse.fail(order.getOrderSn() + " : 支付金额不符合 totalFee=" + totalFee);
+        }
+
+        order.setPayId(payId);
+        order.setPayTime(LocalDateTime.now());
+        order.setOrderStatus(OrderUtil.STATUS_PAY);
+        if (orderService.updateWithOptimisticLocker(order) == 0) {
+            return WxPayNotifyResponse.fail("更新数据已失效");
+        }
+
+        //  支付成功，有团购信息，更新团购信息
+        LitemallGroupon groupon = grouponService.queryByOrderId(order.getId());
+        if (groupon != null) {
+            LitemallGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
+
+            //仅当发起者才创建分享图片
+            if (groupon.getGrouponId() == 0) {
+                String url = qCodeService.createGrouponShareImage(grouponRules.getGoodsName(), grouponRules.getPicUrl(), groupon);
+                groupon.setShareUrl(url);
+            }
+            groupon.setStatus(GrouponConstant.STATUS_ON);
+            if (grouponService.updateById(groupon) == 0) {
+                return WxPayNotifyResponse.fail("更新数据已失效");
+            }
+
+
+            List<LitemallGroupon> grouponList = grouponService.queryJoinRecord(groupon.getGrouponId());
+            if (groupon.getGrouponId() != 0 && (grouponList.size() >= grouponRules.getDiscountMember() - 1)) {
+                for (LitemallGroupon grouponActivity : grouponList) {
+                    grouponActivity.setStatus(GrouponConstant.STATUS_SUCCEED);
+                    grouponService.updateById(grouponActivity);
+                }
+
+                LitemallGroupon grouponSource = grouponService.queryById(groupon.getGrouponId());
+                grouponSource.setStatus(GrouponConstant.STATUS_SUCCEED);
+                grouponService.updateById(grouponSource);
+            }
+        }
+
+        //TODO 发送邮件和短信通知，这里采用异步发送
+        // 订单支付成功以后，会发送短信给用户，以及发送邮件给管理员
+        notifyService.notifyMail("新订单通知", order.toString());
+        // 这里微信的短信平台对参数长度有限制，所以将订单号只截取后6位
+        notifyService.notifySmsTemplateSync(order.getMobile(), NotifyType.PAY_SUCCEED, new String[]{"PAY_SUCCEED", orderSn.substring(8, 14)});
+
+        // 请依据自己的模版消息配置更改参数
+        String[] parms = new String[]{
+                order.getOrderSn(),
+                order.getOrderPrice().toString(),
+                DateTimeUtil.getDateTimeDisplayString(order.getAddTime()),
+                order.getConsignee(),
+                order.getMobile(),
+                order.getAddress()
+        };
+
+        // 取消订单超时未支付任务
+        taskService.removeTask(new OrderUnpaidTask(order.getId()));
+
+        return WxPayNotifyResponse.success("处理成功!");
+    }
     /**
      * 订单申请退款
      * <p>

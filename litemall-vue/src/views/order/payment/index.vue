@@ -17,12 +17,12 @@
       <div class="pay_way_title">选择支付方式</div>
       <van-radio-group v-model="payWay">
         <van-cell-group>
-          <van-cell>
+          <!-- <van-cell>
             <template slot="title">
               <img src="../../../assets/images/ali_pay.png" alt="支付宝" width="82" height="29">
             </template>
             <van-radio name="ali"/>
-          </van-cell>
+          </van-cell> -->
 
           <van-cell>
             <template slot="title">
@@ -30,12 +30,12 @@
             </template>            
             <van-radio name="payjs"/>
           </van-cell>
-          <van-cell>
+          <!-- <van-cell>
             <template slot="title">
               <img src="../../../assets/images/wx_pay.png" alt="微信支付" width="113" height="23">
             </template>            
             <van-radio name="wx"/>
-          </van-cell>
+          </van-cell> -->
         </van-cell-group>
       </van-radio-group>
     </div>
@@ -77,9 +77,9 @@ export default {
     },
     pay() {
       
-      Dialog.alert({
-        message: '你选择了' + (this.payWay === 'wx' ? '微信支付' : this.payWay === 'payjs' ? '微信支付PAYJS' : '支付宝支付')
-      }).then(() => {
+      // Dialog.alert({
+        // message: '你选择了' + (this.payWay === 'wx' ? '微信支付' : this.payWay === 'payjs' ? '微信支付PAYJS' : '支付宝支付')
+      // }).then(() => {
         if (this.payWay === 'wx') {
           let ua = navigator.userAgent.toLowerCase();
           let isWeixin = ua.indexOf('micromessenger') != -1;
@@ -171,7 +171,7 @@ export default {
                 Dialog.alert({ message: err.data.errmsg });
               });
         }
-      });
+      // });
     },
     onBridgeReady() {
       let that = this;

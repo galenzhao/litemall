@@ -111,7 +111,7 @@ public class WxOrderController {
      *
      */
 
-    @PostMapping("payjspay")
+    @PostMapping("jspay")
     public Object payjspay(@LoginUser Integer userId, @RequestBody String body, HttpServletRequest request){
         return wxOrderService.payjs(userId, body, request);
     }
@@ -134,6 +134,11 @@ public class WxOrderController {
     @PostMapping("pay-notify")
     public Object payNotify(HttpServletRequest request, HttpServletResponse response) {
         return wxOrderService.payNotify(request, response);
+    }
+
+    @PostMapping("payjs-notify")
+    public Object payjsNotify(HttpServletRequest request, HttpServletResponse response) {
+        return wxOrderService.payjsNotify(request, response);
     }
 
     /**

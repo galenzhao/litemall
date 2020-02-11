@@ -37,7 +37,12 @@ public class SignUtil {
 
         StringBuilder stringBuilder = new StringBuilder();
         keysList.forEach(item -> {
+            if(item.equalsIgnoreCase("sign")){
+
+            }else
+            {
                 stringBuilder.append(item + "=" + jsonObject.get(item) + "&");
+            }
         });
         stringBuilder.append("key=" + key);
 

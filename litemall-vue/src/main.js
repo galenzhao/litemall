@@ -22,8 +22,8 @@ Vue.use(Button);
 Vue.use(Toast);
 Vue.use(Lazyload, {
   preLoad: 1.3,
-  error: require('@/assets/images/goods_default.png'),
-  loading: require('@/assets/images/goods_default.png'),
+  // error: require('@/assets/images/goods_default.png'),
+  // loading: require('@/assets/images/goods_default.png'),
   attempt: 1,
   listenEvents: ['scroll'],
   lazyComponent: true

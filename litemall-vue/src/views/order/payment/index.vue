@@ -55,7 +55,8 @@ export default {
 
   data() {
     return {
-      payWay: 'wx',
+      // payWay: 'wx',
+      payWay: 'payjs',
       order: {
         orderInfo: {},
         orderGoods: []
@@ -152,9 +153,9 @@ export default {
             orderPayjspay({ orderId: this.orderId })
               .then(res => {
                 let data = res.data.data;
-                Dialog.alert({message: data}).then(() => {
+                // Dialog.alert({message: data}).then(() => {
                   window.location.replace(data);
-                });
+                // });
 
                 // window.location.replace(
                 //   data.mwebUrl +

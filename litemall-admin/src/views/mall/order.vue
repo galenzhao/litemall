@@ -10,6 +10,17 @@
       </el-select>
       <el-button v-permission="['GET /admin/order/list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
+      <div v-for="item in items" :key="item.value" class="weui-cells weui-cells_checkbox font14">
+        <label :label="item.value" :value="item.state" class="weui-cell weui-check__label">
+          <!-- <div class="weui-cell__ft width-inherit"> -->
+          <input v-model="item.state" type="checkbox" class="weui-check" name="checkbox" @click="CheckItem(item)">
+
+          <!-- </div> -->
+          {{ item.value }}
+        </label>
+      </div>
+      <audio ref="audioElm" src="/yinxiao1323.mp3" />
+
     </div>
 
     <!-- 查询结果 -->
@@ -179,9 +190,12 @@ export default {
   },
   data() {
     return {
+      timer: null,
+      lastOrderNumber: 0,
+      items: [{ value: '自动刷新', state: false }],
       list: [],
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -217,19 +231,63 @@ export default {
     this.getList()
     this.getChannel()
   },
+  mounted() {
+    clearInterval(this.timer)
+  },
+  distroyed: function() {
+    clearInterval(this.timer)
+  },
   methods: {
     checkPermission,
     getList() {
+      if (this.listLoading === true) {
+        return
+      }
       this.listLoading = true
       listOrder(this.listQuery).then(response => {
         this.list = response.data.data.list
         this.total = response.data.data.total
         this.listLoading = false
+        if (this.items[0].state === true) {
+          console.log('auto from getlist')
+          // console.log(this.list)
+          if (this.lastOrderNumber !== 0) {
+            console.log('auto last no: ' + this.lastOrderNumber + ' , and new: ' + this.list[0].orderSn)
+            if (this.lastOrderNumber !== this.list[0].orderSn) {
+              this.lastOrderNumber = this.list[0].orderSn
+              // todo alert
+              console.log('alert! new order')
+              this.$refs.audioElm.play()
+            }
+          } else {
+            this.lastOrderNumber = this.list[0].orderSn
+            console.log('setup 0 order with new: ' + this.lastOrderNumber)
+          }
+        }
       }).catch(() => {
         this.list = []
         this.total = 0
         this.listLoading = false
       })
+    },
+    autoUpdate(flag) {
+      console.log('enabled auto update: ' + flag)
+      if (flag === true) {
+        this.timer = setInterval(() => {
+          console.log('try to update list')
+          // .....
+          this.getList()
+        }, 1000 * 60)
+      } else {
+        clearInterval(this.timer)
+      }
+    },
+    CheckItem(item) {
+      item.state = !item.state
+      // console.log(this.items)
+      if (item.value === this.items[0].value) {
+        this.autoUpdate(item.state)
+      }
     },
     getChannel() {
       listChannel().then(response => {

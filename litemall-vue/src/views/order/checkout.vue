@@ -56,6 +56,12 @@
       <van-cell title="优惠券">
         <span class="red">-{{ couponPrice * 100| yuan}}</span>
       </van-cell>
+
+          <van-cell title="希望配送时间(点击右侧选择->)">
+            <datetime v-model="pickdate" type="time" value-zone="local"></datetime>
+          </van-cell>
+          <!-- <datetime format="YYYY-MM-DD H:i:s" width="70px" v-model="picktimeval"></datetime> -->
+
       <van-field v-model="message" placeholder="请输入备注" label="订单备注">
       <template slot="icon">{{message.length}}/50</template>
       </van-field>      
@@ -77,6 +83,9 @@ import { CouponCell, CouponList, Popup } from 'vant';
 import { cartCheckout, orderSubmit, couponSelectList} from '@/api/api';
 import { getLocalStorage, setLocalStorage } from '@/utils/local-storage';
 import dayjs from 'dayjs';
+// import datetime from 'vuejs-datetimepicker';
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css'
 
 export default {
   data() {
@@ -91,7 +100,8 @@ export default {
       orderTotalPrice: 0, //订单总价
       actualPrice: 0, //实际需要支付的总价
       message: '',
-
+      picktimeval: '',
+      pickdate: '',
       isDisabled: false,
       showList: false,
       chosenCoupon: -1,
@@ -111,6 +121,10 @@ export default {
         Toast.fail('请设置收货地址');
         return;
       }
+      if(this.pickdate.length<4){
+        Toast.fail('请选择希望的配送时间！');
+        return;
+      }
 
 
       this.isDisabled = true;
@@ -122,7 +136,7 @@ export default {
         userCouponId: UserCouponId,
         grouponLinkId: 0,
         grouponRulesId: 0,
-        message: this.message
+        message: this.pickdate+'|'+this.message
       }).then(res => {
         
         // 下单成功，重置下单参数。
@@ -225,6 +239,9 @@ export default {
   },
 
   components: {
+    // datetime,
+        datetime: Datetime,
+
     [Toast.name]: Toast ,
     [SubmitBar.name]: SubmitBar,
     [Card.name]: Card,

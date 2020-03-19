@@ -86,6 +86,7 @@ import dayjs from 'dayjs';
 // import datetime from 'vuejs-datetimepicker';
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css'
+import VueAMap from 'vue-amap';
 
 export default {
   data() {
@@ -111,21 +112,20 @@ export default {
   },
   created() {
     this.init();
+
+VueAMap.initAMapApiLoader({
+  // 高德的key
+  key: '25a5467fd5a5d83719c67c205ab33ea9',
+  // 插件集合
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+  // 高德 sdk 版本，默认为 1.4.4
+  v: '1.4.4'
+});
   },
 
   methods: {
-    onSubmit() {     
+    afterConfirmAddr(){
       const {AddressId, CartId, CouponId, UserCouponId} = getLocalStorage('AddressId', 'CartId', 'CouponId', 'UserCouponId');
-
-      if (AddressId === null) {
-        Toast.fail('请设置收货地址');
-        return;
-      }
-      if(this.pickdate.length<4){
-        Toast.fail('请选择希望的配送时间！');
-        return;
-      }
-
 
       this.isDisabled = true;
 
@@ -151,6 +151,57 @@ export default {
         this.isDisabled = false;
         this.$toast("下单失败");
       })
+    },
+    onSubmit() {     
+      const {AddressId, CartId, CouponId, UserCouponId} = getLocalStorage('AddressId', 'CartId', 'CouponId', 'UserCouponId');
+
+      if(!this.pickdate||this.pickdate.length<4){
+        Toast.fail('请选择希望的配送时间！');
+        return;
+      }
+      
+      if (AddressId === null) {
+        Toast.fail('请设置收货地址');
+        return;
+      }
+      var addr = this.checkedAddress.addressDetail;
+console.log(addr);
+var placeSearch = new AMap.PlaceSearch({
+  // city 指定搜索所在城市，支持传入格式有：城市名、citycode和adcode
+  city: '0411'
+})
+
+var that = this;
+placeSearch.search(addr, function (status, result) {
+  /*
+
+O: 121.551378
+P: 38.8886
+lat: 38.8886
+lng: 121.551378
+*/
+
+   // 查询成功时，result即对应匹配的POI信息
+   console.log(result);
+   if(result.poiList.pois.length>0){
+     var loc = result.poiList.pois[0];
+     var p1 = [121.551378, 38.8886];
+var p2 = [loc.location.lng, loc.location.lat];
+// 返回 p1 到 p2 间的地面距离，单位：米
+var dis = AMap.GeometryUtil.distance(p1, p2);
+console.log('distance: '+dis);
+
+
+        if(confirm('您的配送距离已超过3KM！是否继续下单?预估距离为：'+dis+'米\n下单成功后有可能会电话联系您增加配送费用，或者取消您的订单！')){
+
+        console.log('confirm order!');
+        that.afterConfirmAddr();
+
+        }
+        
+   }
+})
+
 
     },
     goAddressList() {

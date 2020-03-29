@@ -153,6 +153,14 @@ VueAMap.initAMapApiLoader({
       })
     },
     onSubmit() {     
+      var today = new Date();
+      var weekday = today.getDay();
+      if(weekday == 0){
+
+      Toast.fail('每周日休息，不能为您提供配送服务，敬请谅解。'+weekday);
+      return;
+      }
+
       const {AddressId, CartId, CouponId, UserCouponId} = getLocalStorage('AddressId', 'CartId', 'CouponId', 'UserCouponId');
 
       if(!this.pickdate||this.pickdate.length<4){
